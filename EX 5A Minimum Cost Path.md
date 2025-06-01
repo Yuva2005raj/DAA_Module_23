@@ -1,47 +1,54 @@
-# EX 5A Minimum Cost Path
+# EX 5B Coin Change Problem
 ## DATE:
 ## AIM:
-To write a Python program using A Naive recursive implementation of Minimum Cost Path Problem.
+To compute the fewest number of coins that we need to make up the amount given.
 
 
 ## Algorithm
-1. Make a table to store minimum costs to reach each cell.
-2. Set the starting cell's cost as the first cost.
-3. Fill the first row and first column by adding costs from left and top.
-4. For other cells, choose the smallest cost from left, top, or diagonal, and add the current cell's cost.
-5. The last cell will have the minimum total cost to reach the end.
-
+1. If amount is 0, answer is 0; if coins are too big, answer is -1.
+2. Make a list dp to remember the fewest coins needed for each amount.
+3. Set 1 coin for amounts equal to the coin values.
+4. For bigger amounts, check if using a coin gives fewer coins, and update.
+5. At the end, return the answer from dp[amount]
 ## Program:
 ```python
 Developed by: YUVARAJ B
 Register Number: 212222230182
 
-R = int(input())
-C = int(input())
-def minCost(cost, m, n):
-    tc = [[0 for x in range(C)] for x in range(R)]
-    tc[0][0] = cost[0][0]
-    for i in range(1, m+1):
-        tc[i][0] = tc[i-1][0] + cost[i][0]
-    for j in range(1, n+1):
-        tc[0][j] = tc[0][j-1] + cost[0][j]
-    for i in range(1, m+1):
-        for j in range(1, n+1):
-            tc[i][j] = min(tc[i-1][j-1], tc[i-1][j], tc[i][j-1]) + cost[i][j]
- 
-    return tc[m][n]
- 
-cost = [[1, 2, 3],
-        [4, 8, 2],
-        [1, 5, 3]]
-print(minCost(cost, R-1, C-1))
+class Solution(object):
+    def coinChange(self, coins, amount):
+        if amount == 0 :
+            return 0
+        if min(coins) > amount:
+            return -1
+        dp = [-1 for i in range(0, amount + 1)]
+        for i in coins:
+            if i > len(dp) - 1:
+                continue
+            dp[i] = 1
+            for j in range(i + 1, amount + 1):
+                if dp[j - i] == -1:
+                    continue
+                elif dp[j] == -1:
+                    dp[j] = dp[j - i] + 1
+                else:
+                    dp[j] = min(dp[j], dp[j - i] + 1)
+        return dp[amount]
+      
+ob1 = Solution()
+n=int(input())
+s=[]
+amt=int(input())
+for i in range(n):
+    s.append(int(input()))
+print(ob1.coinChange(s,amt))
 ```
 
 ## Output:
-![image](https://github.com/user-attachments/assets/de355415-f4d7-4237-9af5-5d93d4835f38)
+![image](https://github.com/user-attachments/assets/9bb0c7ab-76b8-4441-969e-94f6fb0838d2)
 
 
 
 
 ## Result:
-Thus the above program was executed successfully for finding the minimum cost.
+Thus the program was executed successfully for finding the minimum number of coins required to make amount.
